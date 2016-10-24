@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sep"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -23,7 +24,7 @@
 <!-- Latest compiled and minified JavaScript -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
+<script src="<spring:url value="/resources/js/global.js"/>"></script>
 </head>
 <body>
 	<jsp:include page="header.jsp" />
@@ -31,7 +32,8 @@
 		<div class="row">
 			<h1>Services</h1>
 		</div>
-		<form id="appointment-form">
+		<c:url value="/login" var="loginvar"></c:url>
+		<form id="appointment-form" action="${loginvar}" method="post">
 			<div class="form-group">
 				<label for="make">Username</label>
 				<input name="custom_username" class="form-control" />
@@ -40,6 +42,13 @@
 				<label for="model">Password</label>
 				<input type="password" name="custom_password" class="form-control" />
 			</div>
+			<sep:csrfInput/>
+			<c:if test="${param.error != null}">
+				<p>Invalid username or password</p>
+			</c:if>
+			<c:if test="${param.logout != null}">
+				<p>We have successfully logout</p>
+			</c:if>
 			<button type="submit" id="btn-save" class="btn btn-primary">Login</button>
 		</form>
 	</div>
